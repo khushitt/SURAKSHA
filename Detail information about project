@@ -1,0 +1,45 @@
+SURAKSHA – Women’s Safety & Emergency Response Dashboard
+
+SURAKSHA is an interactive web-based dashboard designed to demonstrate a women’s safety and emergency response system. It brings different safety features together in one interface, including emergency SOS, location monitoring, family safety, ride safety, responder activity, evidence management, and safety analytics.
+
+ 🚀 Features
+
+* 🚨 **Emergency SOS** – Simulated SOS alerts and emergency escalation workflow.
+* 📍 **Live Location** – Simulated location tracking with coordinates and movement updates.
+* 👨‍👩‍👧 **Family Safety** – Trusted contacts, check-ins, and family alerts.
+* 🚗 **Ride Safety** – Driver and vehicle information with simulated route deviation detection.
+* 🛡️ **Responder Dashboard** – Simulated incidents, responders, response time, and incident status.
+* 📁 **Evidence Vault** – Demonstration of consent-based photo, video, and audio evidence management.
+* 📊 **Incidents & Analytics** – Safety scores, check-ins, monitored rides, emergency simulations, and route deviations.
+* ⚙️ **Safety Settings** – Privacy permissions, location sharing, offline mode, and safety controls.
+* 📱 **Responsive Design** – Designed for different screen sizes.
+
+ 🛠️ Technologies Used
+
+* HTML5
+* CSS3
+* JavaScript
+* Responsive Web Design
+* Dashboard UI
+* Data Visualization
+
+ 🎯 Project Objective
+
+The objective of SURAKSHA is to demonstrate how multiple women’s safety features can be organized into a single interactive dashboard. The project focuses on user interface design, interactive components, JavaScript functionality, and presenting safety-related information in an easy-to-understand format.
+
+ ⚠️ Important Note
+
+This project is a **front-end demonstration only**. GPS tracking, SOS alerts, emergency dispatch, responder actions, camera/microphone access, and other emergency functions use **mock or simulated data**. The project does not connect to real emergency services.
+
+🔮 Future Improvements
+
+* Backend and database integration
+* Secure user authentication
+* Real-time location services
+* Real-time notifications
+* Advanced analytics and reporting
+* Integration with authorized emergency-response services
+
+👩‍💻 Author
+
+**Khushi Tiwari**
