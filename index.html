@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="SURAKSHA — Women's Safety & Emergency Response Dashboard"
+    >
+
+    <title>SURAKSHA — Women's Safety & Emergency Response</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==================== INTRO SCREEN ==================== -->
+    <div class="intro" id="intro">
+
+        <div class="intro-logo">
+            <i data-lucide="shield-check"></i>
+        </div>
+
+        <h1>SURAKSHA</h1>
+
+        <p>Women's Safety & Emergency Response</p>
+
+        <span>Powered by Khushi Tiwari</span>
+
+    </div>
+
+
+    <!-- ==================== SIDEBAR ==================== -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <i data-lucide="shield"></i>
+            </div>
+
+            <div>
+                <h2>SURAKSHA</h2>
+                <span>Safety Command</span>
+            </div>
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="navigation">
+
+            <button
+                class="nav-item active"
+                onclick="show('overview', this)"
+            >
+                <i data-lucide="layout-dashboard"></i>
+                <span>Overview</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('emergency', this)"
+            >
+                <i data-lucide="siren"></i>
+                <span>Emergency SOS</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('location', this)"
+            >
+                <i data-lucide="map-pin"></i>
+                <span>Live Location</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('family', this)"
+            >
+                <i data-lucide="users"></i>
+                <span>Family Safety</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('ride', this)"
+            >
+                <i data-lucide="car"></i>
+                <span>Ride Safety</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('responder', this)"
+            >
+                <i data-lucide="shield-alert"></i>
+                <span>Responder</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('evidence', this)"
+            >
+                <i data-lucide="folder-lock"></i>
+                <span>Evidence Vault</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('incidents', this)"
+            >
+                <i data-lucide="activity"></i>
+                <span>Incidents & Analytics</span>
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="show('settings', this)"
+            >
+                <i data-lucide="settings"></i>
+                <span>Safety Settings</span>
+            </button>
+
+        </nav>
+
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+
+            <div class="security-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System Secure</strong>
+                    <small>Simulation Mode</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="main">
+
+        <!-- ==================== TOP BAR ==================== -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button
+                    class="menu-btn"
+                    onclick="toggleMenu()"
+                >
+                    <i data-lucide="menu"></i>
+                </button>
+
+                <div>
+                    <h1 id="page-title">
+                        Personal Safety Command Center
+                    </h1>
+
+                    <p id="page-subtitle">
+                        Monitor your safety and emergency readiness
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="topbar-right">
+
+                <span class="demo-pill">
+                    <span></span>
+                    DEMO / SIMULATION
+                </span>
+
+                <button class="icon-btn">
+                    <i data-lucide="bell"></i>
+                </button>
+
+                <button class="icon-btn">
+                    <i data-lucide="shield-check"></i>
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==================== DEMO BANNER ==================== -->
+        <section class="demo-banner">
+
+            <div class="demo-banner-icon">
+                <i data-lucide="info"></i>
+            </div>
+
+            <div class="demo-banner-content">
+
+                <strong>Simulation Mode</strong>
+
+                <p>
+                    GPS, camera, microphone, alerts and responder actions
+                    use mock data only. No covert access or real dispatch.
+                </p>
+
+            </div>
+
+            <button
+                class="demo-btn"
+                onclick="runFullDemo()"
+            >
+                <i data-lucide="play"></i>
+                RUN FULL DEMO
+            </button>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== OVERVIEW ======================= -->
+        <!-- ===================================================== -->
+
+        <section class="page active" id="overview">
+
+            <!-- Page Header -->
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">SAFETY OVERVIEW</span>
+
+                    <h2>You're Protected</h2>
+
+                    <p>
+                        Your safety systems are active and ready.
+                    </p>
+                </div>
+
+                <div class="header-actions">
+
+                    <button
+                        class="secondary-btn"
+                        onclick="resetDemo()"
+                    >
+                        <i data-lucide="rotate-ccw"></i>
+                        Reset Demo
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================== STATUS CARDS ==================== -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon green">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+
+                    <div>
+                        <span>Safety Status</span>
+                        <strong id="safety-status">
+                            SAFE
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon blue">
+                        <i data-lucide="users"></i>
+                    </div>
+
+                    <div>
+                        <span>Family Online</span>
+                        <strong>
+                            3 / 3
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon orange">
+                        <i data-lucide="battery"></i>
+                    </div>
+
+                    <div>
+                        <span>Device Battery</span>
+                        <strong id="battery">
+                            87%
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon purple">
+                        <i data-lucide="clock"></i>
+                    </div>
+
+                    <div>
+                        <span>Last Check-in</span>
+                        <strong>
+                            Just now
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================== SOS SECTION ==================== -->
+            <div class="dashboard-grid">
+
+                <div class="card sos-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                EMERGENCY CONTROL
+                            </span>
+
+                            <h3>Emergency SOS</h3>
+
+                            <p>
+                                Press and hold to simulate emergency
+                                escalation.
+                            </p>
+                        </div>
+
+                        <span class="live-badge">
+                            <span></span>
+                            READY
+                        </span>
+
+                    </div>
+
+
+                    <div class="sos-container">
+
+                        <button
+                            class="sos-button"
+                            onclick="startSOS()"
+                        >
+                            <div class="sos-ring"></div>
+
+                            <i data-lucide="siren"></i>
+
+                            <span>SOS</span>
+
+                            <small>
+                                PRESS TO ACTIVATE
+                            </small>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Emergency Flow -->
+                    <div class="emergency-flow" id="emergency-flow">
+
+                        <div class="flow-step">
+                            <div class="flow-number">1</div>
+
+                            <div>
+                                <strong>SOS Activated</strong>
+                                <span>Waiting for activation</span>
+                            </div>
+                        </div>
+
+
+                        <div class="flow-line"></div>
+
+
+                        <div class="flow-step">
+                            <div class="flow-number">2</div>
+
+                            <div>
+                                <strong>Location Secured</strong>
+                                <span>GPS location simulated</span>
+                            </div>
+                        </div>
+
+
+                        <div class="flow-line"></div>
+
+
+                        <div class="flow-step">
+                            <div class="flow-number">3</div>
+
+                            <div>
+                                <strong>Family Alerted</strong>
+                                <span>Trusted contacts notified</span>
+                            </div>
+                        </div>
+
+
+                        <div class="flow-line"></div>
+
+
+                        <div class="flow-step">
+                            <div class="flow-number">4</div>
+
+                            <div>
+                                <strong>Responder Notified</strong>
+                                <span>Emergency response simulated</span>
+                            </div>
+                        </div>
+
+
+                        <div class="flow-line"></div>
+
+
+                        <div class="flow-step">
+                            <div class="flow-number">5</div>
+
+                            <div>
+                                <strong>Incident Resolved</strong>
+                                <span>Simulation complete</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ==================== LOCATION CARD ==================== -->
+                <div class="card location-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                LOCATION
+                            </span>
+
+                            <h3>Live Location</h3>
+
+                            <p>
+                                Simulated device location.
+                            </p>
+                        </div>
+
+                        <span class="live-badge green">
+                            <span></span>
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="map-container">
+
+                        <div class="map-grid"></div>
+
+                        <div
+                            class="map-marker"
+                            id="map-marker"
+                        >
+                            <div class="marker-pulse"></div>
+
+                            <i data-lucide="map-pin"></i>
+                        </div>
+
+
+                        <div class="map-label">
+
+                            <strong>
+                                Jaipur, Rajasthan
+                            </strong>
+
+                            <span>
+                                Last updated: Just now
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="location-details">
+
+                        <div>
+                            <span>Latitude</span>
+                            <strong id="latitude">
+                                26.9124
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Longitude</span>
+                            <strong id="longitude">
+                                75.7873
+                            </strong>
+                        </div>
+
+                        <button
+                            class="secondary-btn"
+                            onclick="moveMarker()"
+                        >
+                            <i data-lucide="navigation"></i>
+                            Simulate Movement
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================== LOWER CARDS ==================== -->
+            <div class="dashboard-grid lower-grid">
+
+                <!-- Device Status -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                DEVICE
+                            </span>
+
+                            <h3>Device & Privacy</h3>
+                        </div>
+
+                        <i data-lucide="smartphone"></i>
+
+                    </div>
+
+
+                    <div class="device-status">
+
+                        <div class="device-row">
+
+                            <div>
+                                <i data-lucide="map-pin"></i>
+                                <span>Location Access</span>
+                            </div>
+
+                            <span class="status-on">
+                                ON
+                            </span>
+
+                        </div>
+
+
+                        <div class="device-row">
+
+                            <div>
+                                <i data-lucide="camera"></i>
+                                <span>Camera</span>
+                            </div>
+
+                            <span class="status-off">
+                                OFF
+                            </span>
+
+                        </div>
+
+
+                        <div class="device-row">
+
+                            <div>
+                                <i data-lucide="mic"></i>
+                                <span>Microphone</span>
+                            </div>
+
+                            <span class="status-off">
+                                OFF
+                            </span>
+
+                        </div>
+
+
+                        <div class="device-row">
+
+                            <div>
+                                <i data-lucide="wifi"></i>
+                                <span>Network</span>
+                            </div>
+
+                            <span class="status-on">
+                                CONNECTED
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Safety Tips -->
+                <div class="card safety-tips">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                SAFETY
+                            </span>
+
+                            <h3>Quick Safety Tips</h3>
+                        </div>
+
+                        <i data-lucide="lightbulb"></i>
+
+                    </div>
+
+
+                    <div class="tip-list">
+
+                        <div class="tip">
+                            <span>01</span>
+                            <p>
+                                Keep trusted contacts updated.
+                            </p>
+                        </div>
+
+                        <div class="tip">
+                            <span>02</span>
+                            <p>
+                                Check your route before travelling.
+                            </p>
+                        </div>
+
+                        <div class="tip">
+                            <span>03</span>
+                            <p>
+                                Keep emergency services accessible.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== EMERGENCY ====================== -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="emergency">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        EMERGENCY RESPONSE
+                    </span>
+
+                    <h2>Emergency SOS</h2>
+
+                    <p>
+                        Simulate the complete emergency escalation flow.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="emergency-layout">
+
+                <div class="card emergency-main">
+
+                    <div class="emergency-status">
+
+                        <span class="eyebrow">
+                            CURRENT STATUS
+                        </span>
+
+                        <h3 id="emergency-status">
+                            SAFE
+                        </h3>
+
+                        <p>
+                            No active emergency.
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        class="sos-button large"
+                        onclick="startSOS()"
+                    >
+
+                        <div class="sos-ring"></div>
+
+                        <i data-lucide="siren"></i>
+
+                        <span>SOS</span>
+
+                        <small>
+                            ACTIVATE EMERGENCY
+                        </small>
+
+                    </button>
+
+
+                    <button
+                        class="secondary-btn"
+                        onclick="resetDemo()"
+                    >
+                        <i data-lucide="rotate-ccw"></i>
+                        Reset Emergency
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                RESPONSE FLOW
+                            </span>
+
+                            <h3>Emergency Timeline</h3>
+                        </div>
+
+                        <i data-lucide="list-checks"></i>
+
+                    </div>
+
+
+                    <div class="timeline">
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>SOS Activation</strong>
+                                <p>
+                                    Emergency button activated.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>Location Secured</strong>
+                                <p>
+                                    Current location simulated.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>Trusted Contacts</strong>
+                                <p>
+                                    Family notification simulated.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>Responder</strong>
+                                <p>
+                                    Emergency response simulated.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== LOCATION ======================= -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="location">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        LOCATION SERVICES
+                    </span>
+
+                    <h2>Live Location</h2>
+
+                    <p>
+                        Simulated GPS tracking and nearby safety information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="location-page-grid">
+
+                <div class="card large-map-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                SIMULATED GPS
+                            </span>
+
+                            <h3>Current Location</h3>
+                        </div>
+
+                        <span class="live-badge green">
+                            <span></span>
+                            LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="large-map">
+
+                        <div class="map-grid"></div>
+
+                        <div
+                            class="map-marker"
+                            id="large-map-marker"
+                        >
+                            <div class="marker-pulse"></div>
+                            <i data-lucide="map-pin"></i>
+                        </div>
+
+                    </div>
+
+
+                    <div class="map-controls">
+
+                        <button
+                            class="secondary-btn"
+                            onclick="moveMarker()"
+                        >
+                            <i data-lucide="navigation"></i>
+                            Simulate Movement
+                        </button>
+
+                        <button
+                            class="secondary-btn"
+                            onclick="offlineMode()"
+                        >
+                            <i data-lucide="wifi-off"></i>
+                            Offline Mode
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                LOCATION DATA
+                            </span>
+
+                            <h3>Coordinates</h3>
+                        </div>
+
+                        <i data-lucide="crosshair"></i>
+
+                    </div>
+
+
+                    <div class="coordinate-box">
+
+                        <span>LATITUDE</span>
+
+                        <strong id="location-lat">
+                            26.9124
+                        </strong>
+
+                    </div>
+
+
+                    <div class="coordinate-box">
+
+                        <span>LONGITUDE</span>
+
+                        <strong id="location-long">
+                            75.7873
+                        </strong>
+
+                    </div>
+
+
+                    <div class="offline-status">
+
+                        <i data-lucide="wifi"></i>
+
+                        <div>
+                            <strong id="network-status">
+                                Network Connected
+                            </strong>
+
+                            <span>
+                                Location service available
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Nearby Locations -->
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <span class="eyebrow">
+                            NEARBY
+                        </span>
+
+                        <h3>Safe Locations</h3>
+                    </div>
+
+                    <i data-lucide="map"></i>
+
+                </div>
+
+
+                <div class="safe-location-grid">
+
+                    <div class="safe-location">
+
+                        <i data-lucide="hospital"></i>
+
+                        <div>
+                            <strong>Nearest Hospital</strong>
+                            <span>2.4 km away</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="safe-location">
+
+                        <i data-lucide="building-2"></i>
+
+                        <div>
+                            <strong>Police Station</strong>
+                            <span>3.1 km away</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="safe-location">
+
+                        <i data-lucide="store"></i>
+
+                        <div>
+                            <strong>Safe Public Area</strong>
+                            <span>1.2 km away</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== FAMILY ========================= -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="family">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        TRUSTED NETWORK
+                    </span>
+
+                    <h2>Family Safety</h2>
+
+                    <p>
+                        Manage trusted contacts and simulate safety alerts.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="family-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                TRUSTED CONTACTS
+                            </span>
+
+                            <h3>Family Members</h3>
+                        </div>
+
+                        <span class="live-badge green">
+                            3 ONLINE
+                        </span>
+
+                    </div>
+
+
+                    <div class="contact-list">
+
+                        <div class="contact">
+
+                            <div class="avatar">
+                                KT
+                            </div>
+
+                            <div class="contact-info">
+
+                                <strong>
+                                    Khushi Tiwari
+                                </strong>
+
+                                <span>
+                                    Primary User
+                                </span>
+
+                            </div>
+
+                            <span class="online-dot"></span>
+
+                        </div>
+
+
+                        <div class="contact">
+
+                            <div class="avatar">
+                                PS
+                            </div>
+
+                            <div class="contact-info">
+
+                                <strong>
+                                    Priya Sharma
+                                </strong>
+
+                                <span>
+                                    Family Contact
+                                </span>
+
+                            </div>
+
+                            <span class="online-dot"></span>
+
+                        </div>
+
+
+                        <div class="contact">
+
+                            <div class="avatar">
+                                AS
+                            </div>
+
+                            <div class="contact-info">
+
+                                <strong>
+                                    Amit Sharma
+                                </strong>
+
+                                <span>
+                                    Family Contact
+                                </span>
+
+                            </div>
+
+                            <span class="online-dot"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card family-alert-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                ALERT SYSTEM
+                            </span>
+
+                            <h3>Family Alert</h3>
+                        </div>
+
+                        <i data-lucide="bell-ring"></i>
+
+                    </div>
+
+
+                    <p>
+                        Simulate sending a safety notification
+                        to trusted family members.
+                    </p>
+
+
+                    <button
+                        class="primary-btn"
+                        onclick="toast('Family safety alert simulated successfully')"
+                    >
+                        <i data-lucide="send"></i>
+                        Simulate Family Alert
+                    </button>
+
+
+                    <div class="safety-score">
+
+                        <div>
+
+                            <span>Family Safety Score</span>
+
+                            <strong>94%</strong>
+
+                        </div>
+
+                        <div class="progress">
+
+                            <span style="width:94%"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== RIDE =========================== -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="ride">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        TRAVEL SAFETY
+                    </span>
+
+                    <h2>Ride Safety Mode</h2>
+
+                    <p>
+                        Monitor a simulated ride and route deviation.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="ride-grid">
+
+                <div class="card ride-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                CURRENT RIDE
+                            </span>
+
+                            <h3>Ride Details</h3>
+                        </div>
+
+                        <span class="live-badge green">
+                            <span></span>
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="ride-details">
+
+                        <div class="ride-row">
+
+                            <span>Driver</span>
+
+                            <strong>Ravi Singh</strong>
+
+                        </div>
+
+
+                        <div class="ride-row">
+
+                            <span>Vehicle</span>
+
+                            <strong>RJ 14 AB 4821</strong>
+
+                        </div>
+
+
+                        <div class="ride-row">
+
+                            <span>Destination</span>
+
+                            <strong>World Trade Park</strong>
+
+                        </div>
+
+
+                        <div class="ride-row">
+
+                            <span>ETA</span>
+
+                            <strong>18 minutes</strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="primary-btn"
+                        onclick="toggleRide()"
+                    >
+                        <i data-lucide="eye"></i>
+                        Toggle Family Visibility
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                ROUTE MONITORING
+                            </span>
+
+                            <h3>Route Status</h3>
+                        </div>
+
+                        <i data-lucide="route"></i>
+
+                    </div>
+
+
+                    <div class="route-status">
+
+                        <div class="route-icon">
+                            <i data-lucide="check-circle"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Route Normal
+                            </strong>
+
+                            <span>
+                                No deviation detected
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="secondary-btn"
+                        onclick="simulateDeviation()"
+                    >
+                        <i data-lucide="triangle-alert"></i>
+                        Simulate Route Deviation
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== RESPONDER ====================== -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="responder">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        RESPONSE CENTER
+                    </span>
+
+                    <h2>Responder Dashboard</h2>
+
+                    <p>
+                        Simulated emergency responder information.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="responder-grid">
+
+                <div class="card incident-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                ACTIVE INCIDENT
+                            </span>
+
+                            <h3>
+                                Incident #SK-2048
+                            </h3>
+                        </div>
+
+                        <span
+                            class="status-badge"
+                            id="responder-status"
+                        >
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="incident-details">
+
+                        <div>
+                            <span>User</span>
+                            <strong>Khushi Tiwari</strong>
+                        </div>
+
+                        <div>
+                            <span>Location</span>
+                            <strong>Jaipur, Rajasthan</strong>
+                        </div>
+
+                        <div>
+                            <span>Assigned Unit</span>
+                            <strong>Responder R-12</strong>
+                        </div>
+
+                        <div>
+                            <span>Priority</span>
+                            <strong>HIGH</strong>
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="primary-btn"
+                        onclick="resolveResponder()"
+                    >
+                        <i data-lucide="check-circle"></i>
+                        Resolve Incident
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                RESPONDER
+                            </span>
+
+                            <h3>Unit R-12</h3>
+                        </div>
+
+                        <i data-lucide="shield"></i>
+
+                    </div>
+
+
+                    <div class="responder-status">
+
+                        <div class="responder-avatar">
+                            R12
+                        </div>
+
+                        <div>
+                            <strong>Emergency Response Unit</strong>
+                            <span>Simulation responder</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="eta-box">
+
+                        <span>Estimated Response Time</span>
+
+                        <strong>
+                            06:42
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== EVIDENCE ======================= -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="evidence">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        DIGITAL SAFETY
+                    </span>
+
+                    <h2>Evidence Vault</h2>
+
+                    <p>
+                        Simulated evidence collection and secure storage.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="evidence-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                CAMERA
+                            </span>
+
+                            <h3>Camera Evidence</h3>
+                        </div>
+
+                        <i data-lucide="camera"></i>
+
+                    </div>
+
+
+                    <div class="evidence-placeholder">
+
+                        <i data-lucide="camera-off"></i>
+
+                        <strong>
+                            Camera Inactive
+                        </strong>
+
+                        <span>
+                            Camera access is simulated.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="secondary-btn"
+                        onclick="toast('Camera evidence simulation started')"
+                    >
+                        <i data-lucide="camera"></i>
+                        Simulate Camera
+                    </button>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                AUDIO
+                            </span>
+
+                            <h3>Audio Evidence</h3>
+                        </div>
+
+                        <i data-lucide="mic"></i>
+
+                    </div>
+
+
+                    <div class="waveform" id="waveform"></div>
+
+
+                    <button
+                        class="secondary-btn"
+                        onclick="makeWave()"
+                    >
+                        <i data-lucide="mic"></i>
+                        Simulate Audio
+                    </button>
+
+                </div>
+
+
+                <div class="card vault-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                SECURE STORAGE
+                            </span>
+
+                            <h3>Evidence Vault</h3>
+                        </div>
+
+                        <i data-lucide="lock-keyhole"></i>
+
+                    </div>
+
+
+                    <div class="vault-info">
+
+                        <strong>
+                            0 Files
+                        </strong>
+
+                        <span>
+                            No real evidence is stored.
+                        </span>
+
+                    </div>
+
+
+                    <button
+                        class="primary-btn"
+                        onclick="toast('Evidence vault simulation opened')"
+                    >
+                        <i data-lucide="folder-lock"></i>
+                        Open Vault
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== INCIDENTS ====================== -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="incidents">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        ANALYTICS
+                    </span>
+
+                    <h2>Incidents & Analytics</h2>
+
+                    <p>
+                        Review simulated safety activity.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="analytics-grid">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                SAFETY TIMELINE
+                            </span>
+
+                            <h3>Recent Activity</h3>
+                        </div>
+
+                        <i data-lucide="activity"></i>
+
+                    </div>
+
+
+                    <div class="timeline">
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>
+                                    Safety Check-in
+                                </strong>
+
+                                <p>
+                                    Device check-in completed.
+                                </p>
+                            </div>
+
+                            <time>
+                                Just now
+                            </time>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>
+                                    Location Updated
+                                </strong>
+
+                                <p>
+                                    Simulated GPS location updated.
+                                </p>
+                            </div>
+
+                            <time>
+                                5 min ago
+                            </time>
+
+                        </div>
+
+
+                        <div class="timeline-item">
+
+                            <span class="timeline-dot"></span>
+
+                            <div>
+                                <strong>
+                                    Family Connection
+                                </strong>
+
+                                <p>
+                                    Trusted contacts online.
+                                </p>
+                            </div>
+
+                            <time>
+                                10 min ago
+                            </time>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                SAFETY ANALYTICS
+                            </span>
+
+                            <h3>Safety Score</h3>
+                        </div>
+
+                        <i data-lucide="bar-chart-3"></i>
+
+                    </div>
+
+
+                    <div class="score-display">
+
+                        <strong>
+                            94
+                        </strong>
+
+                        <span>
+                            / 100
+                        </span>
+
+                    </div>
+
+
+                    <div class="progress large">
+
+                        <span style="width:94%"></span>
+
+                    </div>
+
+
+                    <div class="analytics-stats">
+
+                        <div>
+                            <span>Check-ins</span>
+                            <strong>24</strong>
+                        </div>
+
+                        <div>
+                            <span>Alerts</span>
+                            <strong>2</strong>
+                        </div>
+
+                        <div>
+                            <span>Resolved</span>
+                            <strong>2</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ===================================================== -->
+        <!-- ==================== SETTINGS ======================= -->
+        <!-- ===================================================== -->
+
+        <section class="page" id="settings">
+
+            <div class="section-header">
+
+                <div>
+                    <span class="eyebrow">
+                        PRIVACY & SECURITY
+                    </span>
+
+                    <h2>Safety Settings</h2>
+
+                    <p>
+                        Manage simulated privacy and emergency permissions.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="settings-grid">
+
+                <!-- Privacy -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                PRIVACY
+                            </span>
+
+                            <h3>Permissions</h3>
+                        </div>
+
+                        <i data-lucide="lock"></i>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="map-pin"></i>
+
+                            <div>
+                                <strong>Location Access</strong>
+                                <span>
+                                    Used for simulated GPS.
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle active"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="camera"></i>
+
+                            <div>
+                                <strong>Camera Access</strong>
+                                <span>
+                                    Used only for simulation.
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="mic"></i>
+
+                            <div>
+                                <strong>Microphone Access</strong>
+                                <span>
+                                    Used only for simulation.
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Emergency Settings -->
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <span class="eyebrow">
+                                EMERGENCY
+                            </span>
+
+                            <h3>Emergency Controls</h3>
+                        </div>
+
+                        <i data-lucide="siren"></i>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="users"></i>
+
+                            <div>
+                                <strong>Family Alerts</strong>
+
+                                <span>
+                                    Notify trusted contacts.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle active"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="shield-alert"></i>
+
+                            <div>
+                                <strong>Responder Alerts</strong>
+
+                                <span>
+                                    Simulate responder notification.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle active"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div class="setting-info">
+
+                            <i data-lucide="wifi-off"></i>
+
+                            <div>
+                                <strong>Offline Location</strong>
+
+                                <span>
+                                    Keep last known location.
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <button
+                            class="toggle active"
+                            onclick="toggle(this)"
+                        >
+                            <span></span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Disclaimer -->
+            <div class="card disclaimer">
+
+                <div class="disclaimer-icon">
+                    <i data-lucide="triangle-alert"></i>
+                </div>
+
+                <div>
+
+                    <strong>
+                        Simulation Disclaimer
+                    </strong>
+
+                    <p>
+                        SURAKSHA is a frontend demonstration project.
+                        GPS tracking, camera, microphone, emergency
+                        notifications and responder actions are simulated
+                        using mock data. This application does not make
+                        real emergency calls, track users covertly, record
+                        users or contact emergency services.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==================== TOAST ==================== -->
+    <div
+        class="toast"
+        id="toast"
+    >
+
+        <i data-lucide="check-circle"></i>
+
+        <span id="toast-text">
+            Action completed
+        </span>
+
+    </div>
+
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script src="script.js"></script>
+
+</body>
+</html>
