@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SURAKSHA — Women's Safety & Emergency Response</title>
+<meta name="description" content="SURAKSHA women safety emergency response frontend simulation demo">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+ --bg:#06070a;--panel:rgba(17,18,24,.72);--panel2:rgba(25,26,34,.78);--line:rgba(255,255,255,.09);
+ --text:#f7f7f9;--muted:#9296a3;--red:#ff3658;--red2:#ff6b7f;--green:#35e0a0;--blue:#57a9ff;--amber:#ffbf4a;
+ --shadow:0 24px 80px rgba(0,0,0,.42)
+}
+body{font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 70% 0%,#241017 0,#0b0b10 32%,var(--bg) 68%);color:var(--text);min-height:100vh;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:60px 60px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+button{font:inherit}
+.hidden{display:none!important}
+
+/* Intro */
+.intro{position:fixed;inset:0;z-index:1000;background:#030407;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.intro.done{animation:introOut .9s ease forwards}
+.intro-core{text-align:center;position:relative}
+.shield{width:112px;height:128px;margin:auto;display:grid;place-items:center;position:relative;animation:shieldIn 1.2s cubic-bezier(.2,.8,.2,1)}
+.shield svg{width:86px;height:86px;color:#fff;fill:rgba(255,54,88,.2);filter:drop-shadow(0 0 22px rgba(255,54,88,.85));z-index:2}
+.shield:before,.shield:after{content:"";position:absolute;border:1px solid rgba(255,54,88,.7);border-radius:50%;inset:4px;animation:pulse 1.8s ease-out infinite}
+.shield:after{inset:-18px;opacity:.4;animation-delay:.35s}
+.intro h1{font-family:"Space Grotesk";font-size:58px;letter-spacing:.18em;margin-top:12px;opacity:0;animation:rise .7s .75s forwards}
+.intro p{color:#c5c7cf;margin-top:9px;opacity:0;animation:rise .7s 1.05s forwards}
+.powered{font-size:12px;color:#777b88;margin-top:18px;opacity:0;animation:rise .7s 1.3s forwards}
+@keyframes shieldIn{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes pulse{0%{transform:scale(.7);opacity:0}35%{opacity:1}100%{transform:scale(1.45);opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes introOut{to{opacity:0;visibility:hidden;transform:scale(1.04)}}
+
+/* Layout */
+.app{display:grid;grid-template-columns:255px 1fr;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:255px;padding:22px 15px;background:rgba(7,8,12,.84);backdrop-filter:blur(24px);border-right:1px solid var(--line);z-index:30}
+.brand{display:flex;align-items:center;gap:11px;padding:7px 10px 23px}
+.brand-mark{width:39px;height:39px;border-radius:12px;background:linear-gradient(145deg,#ff4d6b,#a90f30);display:grid;place-items:center;box-shadow:0 0 28px rgba(255,54,88,.28)}
+.brand strong{font-family:"Space Grotesk";letter-spacing:.12em}
+.brand small{display:block;color:#737783;font-size:9px;margin-top:2px;letter-spacing:.08em}
+.nav{display:grid;gap:5px}
+.nav button{border:0;background:transparent;color:#8e929e;padding:11px 12px;border-radius:11px;text-align:left;display:flex;gap:11px;align-items:center;cursor:pointer;transition:.2s;font-size:13px}
+.nav button:hover,.nav button.active{background:rgba(255,255,255,.055);color:#fff}
+.nav button.active{box-shadow:inset 2px 0 var(--red)}
+.side-bottom{position:absolute;left:15px;right:15px;bottom:17px}
+.mini-user{border:1px solid var(--line);background:rgba(255,255,255,.035);border-radius:14px;padding:11px;display:flex;gap:10px;align-items:center}
+.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#7444ff,#b56cff);font-weight:700;font-size:12px}
+.mini-user small{color:var(--muted);font-size:10px}
+.main{grid-column:2;padding:25px 28px 45px;max-width:1600px;width:100%;margin:auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.kicker{color:var(--red2);font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.topbar h1{font-family:"Space Grotesk";font-size:28px;margin-top:5px}
+.topbar p{color:var(--muted);font-size:12px;margin-top:4px}
+.top-actions{display:flex;gap:9px;align-items:center}
+.icon-btn,.menu-btn{border:1px solid var(--line);background:rgba(255,255,255,.045);color:#d9dbe2;width:39px;height:39px;border-radius:11px;display:grid;place-items:center;cursor:pointer}
+.menu-btn{display:none}
+.demo-pill{font-size:10px;border:1px solid rgba(255,54,88,.28);background:rgba(255,54,88,.08);color:#ff9cad;border-radius:999px;padding:7px 10px;font-weight:700}
+
+/* Components */
+.section{display:none;animation:sectionIn .35s ease}
+.section.active{display:block}
+@keyframes sectionIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.grid{display:grid;gap:15px}
+.cards4{grid-template-columns:repeat(4,1fr)}
+.cards3{grid-template-columns:repeat(3,1fr)}
+.two{grid-template-columns:1.25fr .75fr}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);backdrop-filter:blur(18px);padding:17px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.card h2{font-family:"Space Grotesk";font-size:17px}
+.card h3{font-size:13px}
+.muted{color:var(--muted);font-size:11px}
+.stat{min-height:116px}
+.stat-top{display:flex;justify-content:space-between;align-items:center}
+.stat-icon{width:35px;height:35px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.05)}
+.stat strong{font-size:25px;font-family:"Space Grotesk";display:block;margin-top:15px}
+.green{color:var(--green)}.red{color:var(--red2)}.amber{color:var(--amber)}.blue{color:var(--blue)}
+.badge{font-size:9px;font-weight:800;letter-spacing:.08em;padding:6px 8px;border-radius:999px;background:rgba(53,224,160,.09);color:var(--green);border:1px solid rgba(53,224,160,.18)}
+.badge.red-b{background:rgba(255,54,88,.09);color:#ff8798;border-color:rgba(255,54,88,.2)}
+.badge.amber-b{background:rgba(255,191,74,.08);color:#ffd27a;border-color:rgba(255,191,74,.2)}
+.btn{border:1px solid var(--line);background:rgba(255,255,255,.055);color:#f7f7f9;border-radius:10px;padding:10px 13px;cursor:pointer;font-weight:700;font-size:11px;transition:.2s}
+.btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.09)}
+.btn.primary{background:var(--red);border-color:transparent;box-shadow:0 8px 25px rgba(255,54,88,.2)}
+.btn.green-btn{background:var(--green);color:#03120c;border-color:transparent}
+.btn.full{width:100%}
+.hr{height:1px;background:var(--line);margin:14px 0}
+
+/* SOS */
+.sos-hero{min-height:370px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;overflow:hidden;position:relative}
+.sos-hero:before{content:"";position:absolute;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,rgba(255,54,88,.13),transparent 65%);animation:pulseBg 2.4s infinite}
+@keyframes pulseBg{50%{transform:scale(1.15);opacity:.7}}
+.sos-button{position:relative;width:205px;height:205px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:radial-gradient(circle at 40% 30%,#ff6b7e,#e51d42 52%,#7b0a22);color:#fff;font-family:"Space Grotesk";font-size:42px;font-weight:800;letter-spacing:.08em;box-shadow:0 0 0 12px rgba(255,54,88,.07),0 0 80px rgba(255,54,88,.26);cursor:pointer;z-index:2;transition:.2s}
+.sos-button:hover{transform:scale(1.025)}
+.sos-button:active{transform:scale(.98)}
+.sos-label{margin-top:19px;font-weight:700}.sos-sub{margin-top:5px;color:var(--muted);font-size:11px}
+.countdown{font-size:48px;font-family:"Space Grotesk";font-weight:800;color:#ff7487;position:absolute;z-index:3;display:none}
+.flow{display:grid;gap:11px}
+.flow-step{display:flex;gap:12px;align-items:center;padding:11px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.025)}
+.flow-num{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#171920;color:#777;font-size:10px;font-weight:800}
+.flow-step.done .flow-num{background:rgba(53,224,160,.13);color:var(--green)}
+.flow-step.current{border-color:rgba(255,54,88,.3);background:rgba(255,54,88,.055)}
+.flow-step.current .flow-num{background:var(--red);color:#fff}
+.flow-step strong{font-size:11px}.flow-step small{display:block;color:var(--muted);margin-top:2px;font-size:10px}
+
+/* Map */
+.map{height:355px;border-radius:15px;position:relative;overflow:hidden;background:#0a1114}
+.map:before{content:"";position:absolute;inset:-40%;background:repeating-linear-gradient(38deg,transparent 0 50px,rgba(95,130,132,.13) 51px 53px),repeating-linear-gradient(-27deg,transparent 0 82px,rgba(95,130,132,.1) 83px 85px);transform:rotate(-8deg)}
+.map:after{content:"";position:absolute;left:10%;right:8%;top:52%;height:2px;background:linear-gradient(90deg,transparent,#ff4f69,#ffbf4a,#ff4f69,transparent);transform:rotate(-15deg);box-shadow:0 0 12px rgba(255,54,88,.4)}
+.marker{position:absolute;width:16px;height:16px;border-radius:50%;z-index:4;border:3px solid #fff;box-shadow:0 0 0 7px rgba(255,255,255,.07),0 0 20px currentColor}
+.marker.user{left:51%;top:51%;color:var(--red);background:var(--red)}
+.marker.family{left:27%;top:31%;color:var(--blue);background:var(--blue)}
+.marker.police{left:72%;top:25%;color:var(--amber);background:var(--amber)}
+.marker.hospital{left:76%;top:70%;color:var(--green);background:var(--green)}
+.map-tag{position:absolute;z-index:5;background:rgba(4,7,9,.88);border:1px solid var(--line);padding:5px 7px;border-radius:7px;font-size:9px}
+.t1{left:54%;top:44%}.t2{left:30%;top:24%}.t3{left:75%;top:18%}.t4{left:78%;top:74%}
+.map-legend{position:absolute;bottom:12px;left:12px;z-index:5;display:flex;gap:8px;flex-wrap:wrap}
+.legend{font-size:9px;background:rgba(4,7,9,.82);padding:6px 8px;border-radius:7px;border:1px solid var(--line)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px}
+.route-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px}
+.metric{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:11px;padding:10px}.metric b{font-size:14px;display:block;margin-top:4px}
+
+/* Dashboard tables/cards */
+.rows{display:grid;gap:2px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:11px}.row:last-child{border-bottom:0}.row span{color:var(--muted)}
+.person{display:flex;gap:11px;align-items:center}.person .avatar{width:38px;height:38px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 9px var(--green)}
+.status-dot.warn{background:var(--amber);box-shadow:0 0 9px var(--amber)}
+.family-grid{grid-template-columns:repeat(3,1fr)}
+.media-demo{height:205px;border-radius:14px;background:linear-gradient(135deg,#131820,#071316);position:relative;overflow:hidden;display:grid;place-items:center;border:1px solid var(--line)}
+.camera-frame{width:72%;height:74%;border:1px solid rgba(255,255,255,.18);border-radius:12px;position:relative;background:radial-gradient(circle at 50% 45%,rgba(255,54,88,.12),transparent 48%)}
+.camera-frame:before,.camera-frame:after{content:"";position:absolute;width:18px;height:18px;border-color:#ff687c}.camera-frame:before{left:10px;top:10px;border-left:2px solid;border-top:2px solid}.camera-frame:after{right:10px;bottom:10px;border-right:2px solid;border-bottom:2px solid}
+.demo-cam-label{position:absolute;top:10px;left:10px;font-size:8px;color:#ff9aaa;letter-spacing:.1em}.rec{position:absolute;right:10px;top:10px;font-size:8px}.rec i{display:inline-block;width:6px;height:6px;background:var(--red);border-radius:50%;margin-right:4px;animation:blink 1s infinite}@keyframes blink{50%{opacity:.2}}
+.wave{height:105px;display:flex;align-items:center;justify-content:center;gap:3px}.wave i{width:3px;border-radius:4px;background:linear-gradient(to top,#ff3658,#ff91a1);animation:wave 1s ease-in-out infinite alternate}.wave i:nth-child(2n){animation-delay:.15s}.wave i:nth-child(3n){animation-delay:.3s}@keyframes wave{from{height:10px}to{height:65px}}
+.evidence-grid{grid-template-columns:repeat(3,1fr)}
+.evidence-item{height:145px;border-radius:13px;border:1px solid var(--line);background:linear-gradient(135deg,#151923,#0a0e13);display:flex;flex-direction:column;justify-content:flex-end;padding:12px;position:relative;overflow:hidden}.evidence-item .fake-art{position:absolute;inset:0;background:radial-gradient(circle at 60% 40%,rgba(255,54,88,.24),transparent 25%),linear-gradient(145deg,transparent,#0c1219)}.evidence-item:nth-child(2) .fake-art{background:radial-gradient(circle at 40% 45%,rgba(87,169,255,.22),transparent 27%),linear-gradient(145deg,transparent,#0c1219)}.evidence-item:nth-child(3) .fake-art{background:radial-gradient(circle at 55% 45%,rgba(53,224,160,.19),transparent 27%),linear-gradient(145deg,transparent,#0c1219)}
+.evidence-item span,.evidence-item strong{position:relative;z-index:2}.evidence-item span{font-size:9px;color:#a5a8b1}.evidence-item strong{font-size:11px;margin-top:3px}
+.timeline{position:relative;padding-left:22px}.timeline:before{content:"";position:absolute;left:5px;top:3px;bottom:3px;width:1px;background:#30343d}.event{position:relative;padding:0 0 18px}.event:before{content:"";position:absolute;left:-21px;top:2px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 9px rgba(53,224,160,.5)}.event.active:before{background:var(--red);box-shadow:0 0 12px rgba(255,54,88,.6)}.event b{font-size:11px}.event p{font-size:10px;color:var(--muted);margin-top:4px}
+.progress{height:7px;background:#1c1f27;border-radius:99px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--red),#ff9b6e);border-radius:inherit}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.setting:last-child{border-bottom:0}.setting strong{font-size:11px}.setting p{color:var(--muted);font-size:9px;margin-top:4px}
+.toggle{width:42px;height:23px;border-radius:20px;background:#292d36;border:1px solid var(--line);position:relative;cursor:pointer}.toggle:after{content:"";position:absolute;width:17px;height:17px;border-radius:50%;background:#8c909b;left:2px;top:2px;transition:.2s}.toggle.on{background:rgba(53,224,160,.22);border-color:rgba(53,224,160,.35)}.toggle.on:after{left:21px;background:var(--green)}
+.alert{border:1px solid rgba(255,54,88,.24);background:rgba(255,54,88,.06);padding:12px;border-radius:12px;display:flex;gap:10px;align-items:center}.alert strong{font-size:11px}.alert small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+
+/* toast / modal */
+.toast{position:fixed;right:24px;bottom:24px;z-index:200;background:#151820;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:12px;padding:12px 14px;min-width:250px;transform:translateY(90px);opacity:0;transition:.3s}.toast.show{transform:none;opacity:1}.toast b{font-size:11px}.toast small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.demo-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:12px;margin-bottom:15px}.demo-banner span{font-size:10px;color:#b5b8c1}.demo-banner button{white-space:nowrap}
+.run-demo{box-shadow:0 0 30px rgba(255,54,88,.12)}
+.offline{color:var(--amber)!important}
+@media(max-width:1100px){.cards4{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.family-grid,.evidence-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.app{display:block}.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:none}.main{padding:16px}.menu-btn{display:grid}.topbar{align-items:flex-start}.top-actions .icon-btn{display:none}.cards4{grid-template-columns:1fr 1fr}.intro h1{font-size:40px}}
+@media(max-width:560px){.cards4,.family-grid,.evidence-grid{grid-template-columns:1fr}.sos-button{width:170px;height:170px;font-size:35px}.route-meta{grid-template-columns:1fr}.topbar h1{font-size:22px}}
+</style>
+</head>
+<body>
+
+<div class="intro" id="intro">
+  <div class="intro-core">
+    <div class="shield"><i data-lucide="shield-check"></i></div>
+    <h1>SURAKSHA</h1>
+    <p>Women’s Safety &amp; Emergency Response</p>
+    <div class="powered">Powered by Khushi Tiwari</div>
+  </div>
+</div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-mark"><i data-lucide="shield-check" size="20"></i></div>
+    <div><strong>SURAKSHA</strong><small>SAFETY RESPONSE OS</small></div>
+  </div>
+  <nav class="nav">
+    <button class="active" onclick="show('dashboard',this)"><i data-lucide="layout-dashboard" size="16"></i>Overview</button>
+    <button onclick="show('emergency',this)"><i data-lucide="siren" size="16"></i>Emergency SOS</button>
+    <button onclick="show('location',this)"><i data-lucide="map-pin" size="16"></i>Live Location</button>
+    <button onclick="show('family',this)"><i data-lucide="users" size="16"></i>Family Safety</button>
+    <button onclick="show('ride',this)"><i data-lucide="bike" size="16"></i>Ride Safety</button>
+    <button onclick="show('responder',this)"><i data-lucide="shield" size="16"></i>Responder</button>
+    <button onclick="show('evidence',this)"><i data-lucide="lock-keyhole" size="16"></i>Evidence Vault</button>
+    <button onclick="show('incidents',this)"><i data-lucide="activity" size="16"></i>Incidents &amp; Analytics</button>
+    <button onclick="show('settings',this)"><i data-lucide="settings-2" size="16"></i>Safety Settings</button>
+  </nav>
+  <div class="side-bottom">
+    <div class="mini-user"><div class="avatar">KT</div><div><strong style="font-size:11px">Khushi Tiwari</strong><small>Protected account</small></div></div>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div style="display:flex;gap:11px;align-items:flex-start">
+      <button class="menu-btn" onclick="toggleMenu()"><i data-lucide="menu" size="18"></i></button>
+      <div><div class="kicker">Personal Safety Command Center</div><h1 id="title">Safety Overview</h1><p id="subtitle">One Tap. One Network. Faster Help.</p></div>
+    </div>
+    <div class="top-actions"><span class="demo-pill">DEMO / SIMULATION</span><button class="icon-btn" onclick="toast('All demo services are operational')"><i data-lucide="bell" size="16"></i></button><button class="icon-btn" onclick="toast('Device security status: protected')"><i data-lucide="lock" size="16"></i></button></div>
+  </header>
+
+  <div class="demo-banner">
+    <span><b>Simulation mode:</b> GPS, camera, microphone, alerts and responder actions use mock data only. No covert access or real dispatch.</span>
+    <button class="btn primary run-demo" onclick="runFullDemo()"><i data-lucide="play" size="13" style="vertical-align:-2px"></i> RUN FULL DEMO</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="section active">
+    <div class="grid cards4">
+      <div class="card stat"><div class="stat-top"><span class="muted">Safety status</span><span class="stat-icon green"><i data-lucide="shield-check" size="17"></i></span></div><strong class="green" id="safetyStatus">PROTECTED</strong><span class="muted">All demo systems normal</span></div>
+      <div class="card stat"><div class="stat-top"><span class="muted">Family online</span><span class="stat-icon blue"><i data-lucide="users" size="17"></i></span></div><strong>3 / 4</strong><span class="muted">Trusted contacts connected</span></div>
+      <div class="card stat"><div class="stat-top"><span class="muted">Device battery</span><span class="stat-icon amber"><i data-lucide="battery-medium" size="17"></i></span></div><strong id="battery">87%</strong><span class="muted" id="network">5G • Connected</span></div>
+      <div class="card stat"><div class="stat-top"><span class="muted">Check-in</span><span class="stat-icon"><i data-lucide="timer" size="17"></i></span></div><strong class="green" id="checkStatus">18:00</strong><span class="muted">Next safety check</span></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="grid two">
+      <div class="card sos-hero">
+        <button class="sos-button" onclick="startSOS()">SOS</button><div class="countdown" id="countdown">5</div>
+        <div class="sos-label">Emergency Assistance</div><div class="sos-sub">Tap to begin a simulated emergency countdown</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h2>Emergency escalation</h2><span class="muted">User → Family → Responder</span></div><span class="badge" id="flowBadge">READY</span></div>
+        <div class="hr"></div><div class="flow" id="flow">
+          <div class="flow-step" data-step="0"><div class="flow-num">01</div><div><strong>SOS activated</strong><small>Emergency countdown starts</small></div></div>
+          <div class="flow-step" data-step="1"><div class="flow-num">02</div><div><strong>Location secured</strong><small>Simulated coordinates locked</small></div></div>
+          <div class="flow-step" data-step="2"><div class="flow-num">03</div><div><strong>Family alerted</strong><small>Trusted contacts notified</small></div></div>
+          <div class="flow-step" data-step="3"><div class="flow-num">04</div><div><strong>Responder notified</strong><small>Demo response unit assigned</small></div></div>
+          <div class="flow-step" data-step="4"><div class="flow-num">05</div><div><strong>Incident resolved</strong><small>Case closed in simulation</small></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="grid two">
+      <div class="card"><div class="card-head"><div><h2>Simulated live location</h2><span class="muted">Jaipur, Rajasthan • Accuracy 8m</span></div><span class="badge">LIVE DEMO</span></div><div style="height:12px"></div><div class="map" id="map1"><div class="marker user"></div><div class="map-tag t1">You • Current</div><div class="marker family"></div><div class="map-tag t2">Priya • Family</div><div class="marker police"></div><div class="map-tag t3">Responder</div><div class="marker hospital"></div><div class="map-tag t4">Safe Hospital</div><div class="map-legend"><span class="legend"><i class="dot" style="background:var(--red)"></i>You</span><span class="legend"><i class="dot" style="background:var(--blue)"></i>Family</span><span class="legend"><i class="dot" style="background:var(--amber)"></i>Responder</span></div></div></div>
+      <div class="card"><div class="card-head"><div><h2>Device &amp; privacy status</h2><span class="muted">Browser-safe simulation</span></div></div><div class="rows" style="margin-top:8px"><div class="row"><span>Location permission</span><b class="green">Demo Granted</b></div><div class="row"><span>Camera</span><b class="green">Consent Demo</b></div><div class="row"><span>Microphone</span><b class="green">Consent Demo</b></div><div class="row"><span>Network</span><b class="green">Connected</b></div><div class="row"><span>Offline last-known mode</span><b>Ready</b></div><div class="row"><span>Real police dispatch</span><b class="muted">Disabled</b></div></div></div>
+    </div>
+  </section>
+
+  <!-- EMERGENCY -->
+  <section id="emergency" class="section">
+    <div class="grid two">
+      <div class="card sos-hero"><button class="sos-button" onclick="startSOS()">SOS</button><div class="countdown" id="countdown2">5</div><div class="sos-label">Tap to simulate emergency</div><div class="sos-sub">No real calls, tracking or dispatch are performed</div></div>
+      <div class="card"><div class="card-head"><div><h2>Emergency status</h2><span class="muted">Full response chain</span></div><span class="badge red-b" id="emergencyBadge">STANDBY</span></div><div class="hr"></div><div class="rows" id="emergencyRows"><div class="row"><span>Alert channel</span><b>Family + trusted contacts</b></div><div class="row"><span>Location</span><b>Secure demo coordinates</b></div><div class="row"><span>Responder</span><b>Demo Unit R-12</b></div><div class="row"><span>Escalation</span><b>Automatic simulation</b></div></div></div>
+    </div>
+    <div style="height:15px"></div>
+    <div class="card"><div class="card-head"><div><h2>Demo incident timeline</h2><span class="muted">Watch the response progress</span></div><button class="btn" onclick="resetDemo()">Reset</button></div><div class="hr"></div><div class="timeline" id="emergencyTimeline">
+      <div class="event"><b>System ready</b><p>Waiting for simulated emergency activation.</p></div>
+      <div class="event"><b>Location secured</b><p>Mock coordinates will be locked after SOS.</p></div>
+      <div class="event"><b>Family notified</b><p>Trusted-contact alert simulation.</p></div>
+      <div class="event"><b>Responder assigned</b><p>Demo responder receives incident.</p></div>
+      <div class="event"><b>Incident resolved</b><p>Simulation ends without real-world dispatch.</p></div>
+    </div></div>
+  </section>
+
+  <!-- LOCATION -->
+  <section id="location" class="section">
+    <div class="card"><div class="card-head"><div><h2>📍 Simulated Live Location</h2><span class="muted">Interactive demo map • Jaipur, Rajasthan</span></div><div><button class="btn" onclick="moveMarker()">Simulate Movement</button> <button class="btn" onclick="offlineMode()">Offline Mode</button></div></div><div style="height:15px"></div><div class="map" id="bigMap"><div class="marker user" id="movingMarker"></div><div class="map-tag t1">Khushi • Current</div><div class="marker family"></div><div class="map-tag t2">Priya • Family</div><div class="marker police"></div><div class="map-tag t3">Responder Hub</div><div class="marker hospital"></div><div class="map-tag t4">Safe Hospital</div><div class="map-legend"><span class="legend">Map is simulated — not a live location feed</span></div></div><div class="route-meta"><div class="metric"><span class="muted">Coordinates</span><b id="coords">26.9124, 75.7873</b></div><div class="metric"><span class="muted">Accuracy</span><b>±8 m</b></div><div class="metric"><span class="muted">Mode</span><b id="locMode" class="green">ONLINE</b></div></div></div>
+    <div style="height:15px"></div><div class="grid cards3">
+      <div class="card"><h3>🏥 City Care Hospital</h3><p class="muted" style="margin-top:5px">1.8 km • Safe zone</p></div>
+      <div class="card"><h3>👮 Central Police Station</h3><p class="muted" style="margin-top:5px">2.4 km • Responder point</p></div>
+      <div class="card"><h3>🛡️ Safe Zone — Metro Hub</h3><p class="muted" style="margin-top:5px">0.9 km • Open</p></div>
+    </div>
+  </section>
+
+  <!-- FAMILY -->
+  <section id="family" class="section">
+    <div class="card"><div class="card-head"><div><h2>👨‍👩‍👧 Family Safety Dashboard</h2><span class="muted">Trusted contacts • simulated status</span></div><button class="btn primary" onclick="toast('Demo invitation created')">+ Add Contact</button></div><div style="height:14px"></div><div class="grid family-grid">
+      <div class="card"><div class="person"><div class="avatar">KT</div><div style="flex:1"><strong style="font-size:12px">Khushi Tiwari</strong><div class="muted">You • Jaipur</div></div><span class="status-dot"></span></div><div class="hr"></div><span class="badge">PROTECTED</span></div>
+      <div class="card"><div class="person"><div class="avatar" style="background:linear-gradient(145deg,#2879c7,#65c9ff)">PS</div><div style="flex:1"><strong style="font-size:12px">Priya Sharma</strong><div class="muted">Sister • Home</div></div><span class="status-dot"></span></div><div class="hr"></div><span class="badge">ONLINE</span></div>
+      <div class="card"><div class="person"><div class="avatar" style="background:linear-gradient(145deg,#d67a27,#ffba65)">AS</div><div style="flex:1"><strong style="font-size:12px">Amit Sharma</strong><div class="muted">Father • Work</div></div><span class="status-dot"></span></div><div class="hr"></div><span class="badge">ONLINE</span></div>
+    </div></div>
+    <div style="height:15px"></div><div class="grid two"><div class="card"><h2>Alert simulation</h2><div class="rows"><div class="row"><span>Family SOS alert</span><button class="btn" onclick="toast('Family alert simulation sent')">Send Demo</button></div><div class="row"><span>Trusted contact check-in</span><button class="btn" onclick="toast('Check-in request simulated')">Request</button></div><div class="row"><span>Emergency escalation</span><b class="green">Enabled</b></div></div></div><div class="card"><h2>Family safety score</h2><div style="display:flex;align-items:end;justify-content:space-between;margin:18px 0 8px"><b style="font:700 34px 'Space Grotesk'">94</b><span class="green" style="font-size:11px">+6% this week</span></div><div class="progress"><span style="width:94%"></span></div></div></div>
+  </section>
+
+  <!-- RIDE -->
+  <section id="ride" class="section">
+    <div class="grid two">
+      <div class="card"><div class="card-head"><div><h2>🛵 Ride Safety Mode</h2><span class="muted">Driver, vehicle, route and ETA</span></div><span class="badge" id="rideBadge">INACTIVE</span></div><div class="rows" style="margin-top:9px"><div class="row"><span>Driver</span><b>Ravi Singh</b></div><div class="row"><span>Vehicle</span><b>RJ 14 AB 4821</b></div><div class="row"><span>Destination</span><b>World Trade Park</b></div><div class="row"><span>ETA</span><b id="eta">18 min</b></div><div class="row"><span>Family visibility</span><b class="green">Enabled</b></div><div class="row"><span>Deviation detection</span><b class="green">Enabled</b></div></div><button class="btn primary full" id="rideBtn" onclick="toggleRide()">START RIDE SAFETY</button></div>
+      <div class="card"><div class="card-head"><div><h2>⚠️ Route monitoring</h2><span class="muted">Demo route intelligence</span></div></div><div style="height:12px"></div><div class="map"><div class="marker user"></div><div class="map-tag t1">Current</div><div class="marker hospital"></div><div class="map-tag t4">Destination</div></div><div style="height:12px"></div><button class="btn" onclick="simulateDeviation()">Simulate Route Deviation</button></div>
+    </div>
+  </section>
+
+  <!-- RESPONDER -->
+  <section id="responder" class="section">
+    <div class="grid cards4"><div class="card stat"><span class="muted">Active incidents</span><strong class="red">03</strong><span class="muted">Demo queue</span></div><div class="card stat"><span class="muted">Responders online</span><strong class="green">18</strong><span class="muted">Simulated units</span></div><div class="card stat"><span class="muted">Avg response</span><strong>04:32</strong><span class="muted">Simulation metric</span></div><div class="card stat"><span class="muted">Safe zones</span><strong>27</strong><span class="muted">Indexed locations</span></div></div>
+    <div style="height:15px"></div><div class="grid two"><div class="card"><div class="card-head"><div><span class="kicker">HIGH PRIORITY • DEMO</span><h2 style="margin-top:5px">Incident #SK-2048</h2></div><span class="badge red-b" id="responseState">RECEIVED</span></div><div class="rows"><div class="row"><span>User</span><b>Khushi Tiwari</b></div><div class="row"><span>Location</span><b>Jaipur • 26.9124, 75.7873</b></div><div class="row"><span>Assigned unit</span><b>Responder R-12</b></div><div class="row"><span>Status</span><b id="responderStatus" class="green">EN ROUTE</b></div></div><button class="btn green-btn" onclick="resolveResponder()">Mark Arrived / Resolved</button></div><div class="card"><h2>Nearby response network</h2><div class="rows"><div class="row"><span>Central Police Station</span><b>2.4 km</b></div><div class="row"><span>City Care Hospital</span><b>1.8 km</b></div><div class="row"><span>Safe Zone — Metro Hub</span><b>0.9 km</b></div><div class="row"><span>Private security unit</span><b>1.2 km</b></div></div></div></div>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section id="evidence" class="section">
+    <div class="grid two"><div class="card"><div class="card-head"><div><h2>📹 Consent-based Camera Demo</h2><span class="muted">Visual simulation only</span></div><span class="badge red-b">DEMO</span></div><div style="height:12px"></div><div class="media-demo"><div class="camera-frame"><span class="demo-cam-label">CAMERA SIMULATION</span><span class="rec"><i></i> DEMO REC</span></div></div><div style="height:10px"></div><button class="btn full" onclick="toast('Camera feed simulated — no camera permission requested')">Start Demo Feed</button></div><div class="card"><div class="card-head"><div><h2>🎙️ Simulated Audio</h2><span class="muted">Synthetic waveform</span></div><span class="badge">DEMO</span></div><div class="wave" id="wave"></div><button class="btn full" onclick="toast('Audio waveform simulation toggled')">Toggle Audio Demo</button></div></div>
+    <div style="height:15px"></div><div class="card"><div class="card-head"><div><h2>🔐 Evidence Vault</h2><span class="muted">Simulated photo, video and audio evidence</span></div><span class="badge">LOCAL DEMO</span></div><div style="height:14px"></div><div class="grid evidence-grid"><div class="evidence-item"><div class="fake-art"></div><span>PHOTO • 22:08</span><strong>Street snapshot • simulated</strong></div><div class="evidence-item"><div class="fake-art"></div><span>VIDEO • 22:09</span><strong>Ride clip • simulated</strong></div><div class="evidence-item"><div class="fake-art"></div><span>AUDIO • 22:10</span><strong>Voice note • simulated</strong></div></div></div>
+  </section>
+
+  <!-- INCIDENTS -->
+  <section id="incidents" class="section">
+    <div class="grid two"><div class="card"><div class="card-head"><div><h2>📊 Incident Timeline</h2><span class="muted">Recent safety activity</span></div><span class="badge">DEMO DATA</span></div><div style="height:15px"></div><div class="timeline"><div class="event"><b>22:10 — Safety check completed</b><p>User confirmed safe in simulation.</p></div><div class="event"><b>21:42 — Ride monitored</b><p>Route matched expected destination.</p></div><div class="event"><b>20:15 — Location secured</b><p>Simulated location synchronization successful.</p></div><div class="event"><b>18:20 — Family check-in</b><p>Priya Sharma confirmed safe.</p></div></div></div><div class="card"><h2>Safety Analytics</h2><div class="rows"><div class="row"><span>Safety score</span><b class="green">94 / 100</b></div><div class="row"><span>Check-ins completed</span><b>28</b></div><div class="row"><span>Rides monitored</span><b>16</b></div><div class="row"><span>Emergency simulations</span><b>4</b></div><div class="row"><span>Route deviations</span><b class="amber">2</b></div></div><div style="margin-top:14px"><span class="muted">Preparedness score</span><div class="progress" style="margin-top:7px"><span style="width:94%"></span></div></div></div></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section id="settings" class="section">
+    <div class="grid two"><div class="card"><div class="card-head"><div><h2>⚙️ Privacy &amp; Permissions</h2><span class="muted">Explicit consent controls</span></div></div><div class="setting"><div><strong>Location sharing</strong><p>Simulated trusted-contact location sharing</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>Camera permission</strong><p>Only requested through an explicit browser permission flow in a real build</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>Microphone permission</strong><p>No covert or background recording</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>Offline last-known mode</strong><p>Stores the last simulated location locally</p></div><div class="toggle on" onclick="toggle(this)"></div></div></div><div class="card"><h2>Emergency &amp; Contacts</h2><div class="setting"><div><strong>Family alerts</strong><p>Trusted contact simulation</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>Route deviation</strong><p>Demo detection and alert</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>No-response timer</strong><p>Check-in escalation simulation</p></div><div class="toggle on" onclick="toggle(this)"></div></div><div class="setting"><div><strong>Real dispatch</strong><p>Always disabled in this frontend demo</p></div><span class="badge red-b">DISABLED</span></div></div></div>
+  </section>
+</main>
+</div>
+
+<div class="toast" id="toast"><b id="toastTitle">SURAKSHA</b><small id="toastText"></small></div>
+
+<script>
+const pageInfo={
+ dashboard:["Safety Overview","One Tap. One Network. Faster Help."],
+ emergency:["Emergency SOS","Simulated emergency escalation and response"],
+ location:["Live Location","Simulated location, route and nearby safe zones"],
+ family:["Family Safety","Trusted contacts and safety status"],
+ ride:["Ride Safety Mode","Driver, route, ETA and deviation monitoring"],
+ responder:["Responder Dashboard","Simulated emergency response command center"],
+ evidence:["Evidence Vault","Consent-based camera/audio demonstrations"],
+ incidents:["Incidents & Analytics","Safety timeline and preparedness metrics"],
+ settings:["Safety Settings","Privacy, permissions, contacts and device controls"]
+};
+function show(id,btn){
+ document.querySelectorAll(".section").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ document.getElementById("title").textContent=pageInfo[id][0];
+ document.getElementById("subtitle").textContent=pageInfo[id][1];
+ document.getElementById("sidebar").classList.remove("open");
+ lucide.createIcons();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function toggleMenu(){document.getElementById("sidebar").classList.toggle("open")}
+function toast(text){
+ const t=document.getElementById("toast");document.getElementById("toastText").textContent=text;
+ t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),3000)
+}
+function toggle(el){el.classList.toggle("on");toast(el.classList.contains("on")?"Setting enabled":"Setting disabled")}
+let sosTimer=null;
+function startSOS(){
+ if(sosTimer)return;
+ let n=5;document.querySelectorAll(".countdown").forEach(x=>{x.style.display="block";x.textContent=n});
+ document.getElementById("safetyStatus").textContent="ALERT";
+ document.getElementById("safetyStatus").className="red";
+ document.getElementById("flowBadge").textContent="ACTIVE";
+ toast("SOS countdown started — simulation only");
+ sosTimer=setInterval(()=>{
+   n--;document.querySelectorAll(".countdown").forEach(x=>x.textContent=n);
+   if(n<=0){clearInterval(sosTimer);sosTimer=null;document.querySelectorAll(".countdown").forEach(x=>x.style.display="none");runFlow(false);show("emergency",document.querySelectorAll(".nav button")[1]);toast("SOS simulated: family and responder alerts triggered")}
+ },1000)
+}
+function resetDemo(){
+ document.querySelectorAll(".flow-step").forEach(x=>x.classList.remove("done","current"));
+ document.querySelectorAll(".flow-step")[0].classList.add("current");
+ document.getElementById("flowBadge").textContent="READY";
+ document.getElementById("safetyStatus").textContent="PROTECTED";
+ document.getElementById("safetyStatus").className="green";
+ document.getElementById("emergencyBadge").textContent="STANDBY";
+ toast("Demo flow reset")
+}
+function runFlow(notify=true){
+ const steps=[0,1,2,3,4];steps.forEach((s,i)=>setTimeout(()=>{
+   document.querySelectorAll(".flow-step").forEach(x=>x.classList.remove("current"));
+   const el=document.querySelector('.flow-step[data-step="'+s+'"]');el.classList.add("done");
+   if(s<4)el.classList.add("current");
+   document.getElementById("flowBadge").textContent=s<4?"IN PROGRESS":"RESOLVED";
+   if(s===0)toast("1/5 SOS activated");
+   if(s===1)toast("2/5 Location secured");
+   if(s===2)toast("3/5 Family alerted");
+   if(s===3)toast("4/5 Responder notified — En Route");
+   if(s===4){toast("5/5 Responder arrived — Incident resolved");document.getElementById("safetyStatus").textContent="RESOLVED";document.getElementById("safetyStatus").className="green"}
+ },i*1450))}
+function runFullDemo(){
+ resetDemo();document.querySelectorAll(".flow-step").forEach(x=>x.classList.remove("done","current"));
+ document.querySelector('.flow-step[data-step="0"]').classList.add("current");
+ toast("RUN FULL DEMO started");
+ runFlow(false);
+ setTimeout(()=>{show("responder",document.querySelectorAll(".nav button")[5]);document.getElementById("responseState").textContent="EN ROUTE";document.getElementById("responderStatus").textContent="EN ROUTE"},4500);
+ setTimeout(()=>{document.getElementById("responseState").textContent="ARRIVED";document.getElementById("responderStatus").textContent="ARRIVED";toast("Responder arrived — simulation")},6000);
+ setTimeout(()=>{document.getElementById("responseState").textContent="RESOLVED";document.getElementById("responderStatus").textContent="RESOLVED";toast("Incident resolved — demo complete")},7500);
+}
+function moveMarker(){
+ const m=document.getElementById("movingMarker"),x=38+Math.random()*28,y=35+Math.random()*28;
+ m.style.left=x+"%";m.style.top=y+"%";document.getElementById("coords").textContent=(26.90+Math.random()*.03).toFixed(4)+", "+(75.77+Math.random()*.04).toFixed(4);toast("Simulated location updated")
+}
+function offlineMode(){
+ document.getElementById("locMode").textContent="OFFLINE • LAST KNOWN";document.getElementById("locMode").className="amber offline";document.getElementById("network").textContent="Offline • Last-known location saved";toast("Offline mode simulated — last-known location retained")
+}
+let ride=false;
+function toggleRide(){
+ ride=!ride;document.getElementById("rideBadge").textContent=ride?"ACTIVE":"INACTIVE";document.getElementById("rideBtn").textContent=ride?"STOP RIDE SAFETY":"START RIDE SAFETY";toast(ride?"Ride Safety Mode activated":"Ride Safety Mode stopped")
+}
+function simulateDeviation(){toast("⚠️ Route deviation detected — family alert simulation sent");document.getElementById("rideBadge").textContent="DEVIATION"}
+function resolveResponder(){document.getElementById("responseState").textContent="RESOLVED";document.getElementById("responderStatus").textContent="RESOLVED";toast("Responder marked incident resolved")}
+function makeWave(){
+ const w=document.getElementById("wave");for(let i=0;i<42;i++){const e=document.createElement("i");e.style.height=(10+Math.random()*55)+"px";e.style.animationDelay=(Math.random()*.8)+"s";w.appendChild(e)}
+}
+setInterval(()=>{let b=parseInt(document.getElementById("battery").textContent);if(b>12){b-=Math.random()<.25?1:0;document.getElementById("battery").textContent=b+"%"}},9000);
+window.addEventListener("load",()=>{lucide.createIcons();makeWave();setTimeout(()=>document.getElementById("intro").classList.add("done"),2300);setTimeout(()=>document.getElementById("intro").remove(),3300)})
+</script>
+</body>
+</html>
